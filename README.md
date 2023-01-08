@@ -9,7 +9,11 @@
 My name is Alex Pavlov. 
 I am professional data engineer and DWH developer.
 
+
+
 ### Basic Commands for working with git
+
+https://github.com/aipavlo/aipavlo/blob/main/git_commands
 
 
 <!--
