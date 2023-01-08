@@ -1,0 +1,46 @@
+# init
+1/ create SSH pair
+2/ add .pub to git preferences
+3/ git init in the project directory
+
+# working with branches
+4/ git branch test - create new branch <test>
+5/ git branch - check all branches
+6/ git branch -m <new_name> - rename active branch (or git branch -m <old_name> <new_name>)
+7/ git branch -D <name> - delete branch
+8/ git checkout <branch name>
+# check git logs
+9/ git log
+# add file to repo
+10/ git add 1.txt (file name, directory or all with <.>) - add files to index; -p check every file
+11/ git commit (git commit -m "<comment>"); --amend (add changes to last commit and edit comment !!!before push!!!), after that - git show HEAD
+
+# update prompt
+12/ add name of branch to prompt
+. ~/git-prompt.sh
+export GIT_PS1_SHOWDIRTYSTATE=1
+export PS1='\[\033[36m\] \u@\h \w$(__git_ps1 "\[\033[32m\](%s)") \[\033[34m\][\D{%H:%M}]: \[\033[37m\]'
+
+# find commit
+13/ git checkout HEAD^3 - active branch, 3 commits earlier (HEAD~3)
+14/ git remote - check all repos
+15/ git tag - check all tags
+16/ git tag -a 0.1 -m "my first tag" - create tag 0.1 with comment "my first tag"
+
+# get project from repo
+17/ git pull <remote> <branch> - get changes from repository
+18/ git pull --rebase -- - get actual changes from repository
+
+# conflict resolving
+19/ git status - check problems
+20/ resolve conflict and file to index ("git add 1.txt" or "git rm 1.txt ")
+21/ git rebase --continue
+22/ git rebase --abort - stop solving problems
+23/ git fetch origin develop - get only 1 branch (git fetch origin develop:myOwnDevelop - get branch and rename)
+24/ git show HEAD - check last commit
+
+# delete commits
+25/ git reset <hashcommit> - reset commit index to target commit !!!before push!!!
+26/ git checkout . - delete changes of resetted commit
+27/ git revert - commit rollback
+28/ git diff - check every rows of changes
