@@ -1,5 +1,8 @@
 ### Hi there <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="25px">
 
+My name is Alex Pavlov. 
+I am professional data engineer and DWH developer.
+
 <a href="https://linkedin.com/in/pavlov-aleksandr">
   <img align="left" alt="LinkdeIn" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" />
 </a>
