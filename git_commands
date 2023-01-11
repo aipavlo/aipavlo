@@ -1,7 +1,7 @@
 # init
 1/ create SSH pair
 2/ add .pub to git preferences
-3/ git init in the project directory
+3/ git init (create new local repo) OR git clone <url> (copy remote repo)
 
 # working with branches
 4/ git branch test - create new branch <test>
