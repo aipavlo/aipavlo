@@ -32,7 +32,7 @@ export PS1='\[\033[36m\] \u@\h \w$(__git_ps1 "\[\033[32m\](%s)") \[\033[34m\][\D
 18/ git pull --rebase -- - get actual changes from repository
 
 # conflict resolving
-19/ git status - check problems
+19/ git status - check problems (all uncommited changes)
 20/ resolve conflict and file to index ("git add 1.txt" or "git rm 1.txt ")
 21/ git rebase --continue
 22/ git rebase --abort - stop solving problems
