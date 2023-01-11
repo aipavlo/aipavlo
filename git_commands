@@ -10,7 +10,7 @@
 7/ git branch -D <name> - delete branch
 8/ git checkout <branch name>
 # check git logs
-9/ git log
+9/ git log OR git log -p <file or directory> - see history of changes
 # add file to repo
 10/ git add 1.txt (file name, directory or all with <.>) - add files to index; -p check every file
 11/ git commit (git commit -m "<comment>"); --amend (add changes to last commit and edit comment !!!before push!!!), after that - git show HEAD
