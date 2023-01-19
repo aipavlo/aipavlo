@@ -1,0 +1,35 @@
+Users:
+sadmin - An administrative user with read and write access to all shares.
+josh - A regular user with its own private file share.
+
+Shares:
+users - This share will be accessible with read/write permissions by all users.
+josh - This share will be accessible with read/write permissions only by users josh and sadmin.
+
+Mounting the Samba share
+To mount a Samba share on Linux first you need to install the cifs-utils package.
+
+On Ubuntu and Debian run:
+
+sudo apt install cifs-utils
+Copy
+On CentOS and Fedora run:
+
+
+sudo yum install cifs-utils
+Copy
+Next, create a mount point:
+
+sudo mkdir /mnt/smbmount
+Copy
+Mount the share using the following command:
+
+sudo mount -t cifs -o username=username //samba_hostname_or_server_ip/sharename /mnt/smbmount
+Copy
+For example to mount a share named josh on a Samba server with IP address 192.168.121.118 as user josh to the /mnt/smbmount mount point you would run:
+
+sudo mount -t cifs -o username=josh //192.168.121.118/josh /mnt/smbmount
+Copy
+You will be prompted to enter the user password.
+
+Password for josh@//192.168.121.118/josh:  ********
