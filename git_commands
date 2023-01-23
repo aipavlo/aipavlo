@@ -9,7 +9,7 @@
 6/ git branch -m <new_name> - rename active branch (or git branch -m <old_name> <new_name>)
 7/ git branch -D <name> - delete branch
 8/ git checkout <branch name> - switch branch
-   git merge hotfix - merge hotfix into <branch name>
+   git merge --no-ff hotfix - merge hotfix into <branch name> with "no fast forward"
 
 # check git logs
 9/ git log OR git log -p <file or directory> - see history of changes
