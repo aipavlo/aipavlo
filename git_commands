@@ -8,7 +8,9 @@
 5/ git branch - check all branches
 6/ git branch -m <new_name> - rename active branch (or git branch -m <old_name> <new_name>)
 7/ git branch -D <name> - delete branch
-8/ git checkout <branch name>
+8/ git checkout <branch name> - switch branch
+   git merge hotfix - merge hotfix into <branch name>
+
 # check git logs
 9/ git log OR git log -p <file or directory> - see history of changes
 # add file to repo
