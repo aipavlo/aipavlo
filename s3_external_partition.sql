@@ -35,7 +35,7 @@ FORMAT 'CUSTOM' (FORMATTER='pxfwritable_import');
 
 INSERT INTO src.before_2020_from_s3_archive_write SELECT * FROM src.gp_tbl_230417_part_1_prt_before_2020 ;
 
-— 5 change partition and table
+-- 5 change partition and table
 ALTER TABLE src.gp_tbl_230417_part
 alter partition before_2020
 EXCHANGE PARTITION before_2020
