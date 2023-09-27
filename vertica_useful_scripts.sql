@@ -1,3 +1,5 @@
+SELECT EXPORT_OBJECTS( '', 'schema_name.table_name') ; -- export DDL
+
 SELECT CLOSE_ALL_SESSIONS(); -- close all sessions except during session
 
 SELECT AUDIT('public.table_name', 'table', 0, 100);
