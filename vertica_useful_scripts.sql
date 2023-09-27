@@ -2,6 +2,8 @@ SELECT CLOSE_ALL_SESSIONS(); -- close all sessions except during session
 
 SELECT AUDIT('public.table_name', 'table', 0, 100);
 SELECT ANALYZE_STATISTICS('public.table_name');
+SELECT GET_COMPLIANCE_STATUS(); -- check vertica actual audit status 
+SELECT AUDIT_LICENSE_SIZE(); -- trigger an immediate audit
 
 -- CHECK ALL ROS CONTAINERS
 SELECT * FROM storage_containers
