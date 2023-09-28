@@ -7,6 +7,8 @@ SELECT ANALYZE_STATISTICS('public.table_name');
 SELECT GET_COMPLIANCE_STATUS(); -- check vertica actual audit status 
 SELECT AUDIT_LICENSE_SIZE(); -- trigger an immediate audit
 
+-- CHECK ALL PROJECTIONS
+SELECT * FROM v_catalog.projections WHERE projection_schema = 'schema_name' AND anchor_table_name = 'table_name';
 -- CHECK ALL ROS CONTAINERS
 SELECT * FROM storage_containers
 WHERE projection_name = 'table_name' and SCHEMA_name = 'schema_name';
