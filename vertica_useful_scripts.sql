@@ -11,7 +11,7 @@ SELECT AUDIT_LICENSE_SIZE(); -- trigger an immediate audit
 SELECT * FROM v_catalog.projections WHERE projection_schema = 'schema_name' AND anchor_table_name = 'table_name';
 -- CHECK ALL ROS CONTAINERS
 SELECT * FROM storage_containers
-WHERE projection_name = 'table_name' and SCHEMA_name = 'schema_name';
+WHERE SCHEMA_name = 'schema_name' and projection_name = 'table_name';
 -- SELECT EXECTLY 1 CONTAINER (CHOOSE FROM PREVIOUS RESULT)
 SELECT * FROM table_name.schema_name 
 WHERE lead_storage_oid() = '45035996283468437';
