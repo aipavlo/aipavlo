@@ -44,4 +44,8 @@ ALTER TABLE schema_name.table_name ADD CONSTRAINT constraint_name PRIMARY KEY (c
 -- ENABLE CONSTRAINT
 ALTER TABLE schema_name.table_name ALTER CONSTRAINT table_name_PK ENABLED;
 
+-- VSQL
+-- stop on error
+\set ON_ERROR_STOP on
+
 
