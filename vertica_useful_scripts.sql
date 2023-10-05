@@ -44,6 +44,10 @@ WHERE TABLE_NAME = 'table_name' AND CONSTRAINT_SCHEMA_ID = (SELECT SCHEMA_ID FRO
 ALTER TABLE schema_name.table_name ADD CONSTRAINT constraint_name PRIMARY KEY (column_name1, column_name2, ...) ENABLED;
 -- ENABLE/DISABLE CONSTRAINT
 ALTER TABLE schema_name.table_name ALTER CONSTRAINT table_name_PK ENABLED; -- DISABLED
+-- SEQUENCE
+DROP SEQUENCE IF EXISTS schema_name.sequence_name;
+CREATE SEQUENCE IF NOT EXISTS schema_name.sequence_name;
+ALTER SEQUENCE schema_name.sequence_name CACHE 1;
 
 -- VSQL
 -- stop on error
