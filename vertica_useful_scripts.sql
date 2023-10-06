@@ -3,7 +3,8 @@ SELECT AUDIT('public.table_name', 'table', 0, 100);
 SELECT ANALYZE_STATISTICS('public.table_name');
 SELECT GET_COMPLIANCE_STATUS(); -- check vertica actual audit status 
 SELECT AUDIT_LICENSE_SIZE(); -- trigger an immediate audit
-SELECT /*+DEPOT_FETCH(NONE)*/ (SUM(AUDIT_LENGTH("column_name")) )FROM schema_name.table_name;
+SELECT /*+DEPOT_FETCH(NONE)*/ (SUM(AUDIT_LENGTH(column_name)) )FROM schema_name.table_name;
+SELECT APPROXIMATE_COUNT_DISTINCT(column_name) FROM schema_name.table_name;
 
 -- 100 BIGGEST TABLES IN VERTICA DB ACCORDING TO THE TOTAL DISK SPACE
 SELECT anchor_table_schema, anchor_table_name, SUM(used_bytes) AS total_used_bytes
