@@ -54,4 +54,13 @@ ALTER SEQUENCE schema_name.sequence_name CACHE 1;
 -- stop on error
 \set ON_ERROR_STOP on
 
+-- FLATTEN TABLE REBUILD WITH PARTITION
+SELECT REFRESH_COLUMNS (
+'schema_name.table_name',
+'column_name1',
+'REBUILD',
+TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'),
+TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM')
+);
+
 
