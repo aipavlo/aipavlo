@@ -5,6 +5,9 @@ SELECT GET_COMPLIANCE_STATUS(); -- check vertica actual audit status
 SELECT AUDIT_LICENSE_SIZE(); -- trigger an immediate audit
 SELECT /*+DEPOT_FETCH(NONE)*/ (SUM(AUDIT_LENGTH(column_name)) )FROM schema_name.table_name;
 SELECT APPROXIMATE_COUNT_DISTINCT(column_name) FROM schema_name.table_name;
+-- RESOURCE POOL
+SELECT pool_name, node_name, max_query_memory_size_kb, max_memory_size_kb, memory_size_actual_kb FROM V_MONITOR.RESOURCE_POOL_STATUS WHERE pool_name='general';
+SELECT name, memorysize, maxmemorysize FROM V_CATALOG.RESOURCE_POOLS;
 
 -- 100 BIGGEST TABLES IN VERTICA DB ACCORDING TO THE TOTAL DISK SPACE
 SELECT anchor_table_schema, anchor_table_name, SUM(used_bytes) AS total_used_bytes
@@ -37,7 +40,7 @@ SELECT * FROM table_name.schema_name
 WHERE lead_storage_oid() = '45035996283468437';
 
 
--- DDL
+--- DDL ---
 -- CHECK ENABLED AND DISABLED CONSTRAINTS
 SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE, IS_ENABLED FROM V_CATALOG.TABLE_CONSTRAINTS
 WHERE TABLE_NAME = 'table_name' AND CONSTRAINT_SCHEMA_ID = (SELECT SCHEMA_ID FROM V_CATALOG.SCHEMATA WHERE SCHEMA_NAME = 'schema_name');
@@ -49,18 +52,11 @@ ALTER TABLE schema_name.table_name ALTER CONSTRAINT table_name_PK ENABLED; -- DI
 DROP SEQUENCE IF EXISTS schema_name.sequence_name;
 CREATE SEQUENCE IF NOT EXISTS schema_name.sequence_name;
 ALTER SEQUENCE schema_name.sequence_name CACHE 1;
+-- FLATTEN TABLE REBUILD WITH PARTITION
+SELECT REFRESH_COLUMNS ('schema_name.table_name', 'column_name1', 'REBUILD',
+TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'),
+TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'));
 
 -- VSQL
 -- stop on error
 \set ON_ERROR_STOP on
-
--- FLATTEN TABLE REBUILD WITH PARTITION
-SELECT REFRESH_COLUMNS (
-'schema_name.table_name',
-'column_name1',
-'REBUILD',
-TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'),
-TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM')
-);
-
-
