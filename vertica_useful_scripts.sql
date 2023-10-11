@@ -57,6 +57,14 @@ SELECT REFRESH_COLUMNS ('schema_name.table_name', 'column_name1', 'REBUILD',
 TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'),
 TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'));
 
--- VSQL
+
+--- FLEX TABLE ---
+CREATE FLEX TABLE flex.dwh_flex();
+COPY flex.dwh_flex FROM '/file_to_import/dwh.csv.gz' GZIP PARSER fcsvparser();
+SELECT COMPUTE_FLEXTABLE_KEYS_AND_BUILD_VIEW('flex.dwh_flex');
+CREATE TABLE src.dwh_table AS SELECT * FROM flex.dwh_flex_view;
+
+
+--- VSQL ---
 -- stop on error
 \set ON_ERROR_STOP on
