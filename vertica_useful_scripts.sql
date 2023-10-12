@@ -71,3 +71,4 @@ CREATE TABLE IF NOT EXISTS src.dwh_table AS SELECT * FROM flex.dwh_flex_view;
 --- VSQL ---
 -- stop on error
 \set ON_ERROR_STOP on
+:!! # Executes a shell command and returns the output to vsql.
