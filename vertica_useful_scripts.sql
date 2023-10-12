@@ -60,10 +60,11 @@ TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'));
 
 --- FLEX TABLE ---
 --DROP TABLE IF EXISTS flex.dwh_flex;
-CREATE FLEX TABLE flex.dwh_flex();
+CREATE FLEX TABLE IF NOT EXISTS flex.dwh_flex();
 COPY flex.dwh_flex FROM '/file_to_import/dwh.csv.gz' GZIP PARSER fcsvparser();
 SELECT COMPUTE_FLEXTABLE_KEYS_AND_BUILD_VIEW('flex.dwh_flex');
-CREATE TABLE src.dwh_table AS SELECT * FROM flex.dwh_flex_view;
+--DROP TABLE IF EXISTS src.dwh_table;
+CREATE TABLE IF NOT EXISTS src.dwh_table AS SELECT * FROM flex.dwh_flex_view;
 
 
 --- VSQL ---
