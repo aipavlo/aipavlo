@@ -72,4 +72,4 @@ CREATE TABLE IF NOT EXISTS src.dwh_table AS SELECT * FROM flex.dwh_flex_view;
 -- stop on error
 \set ON_ERROR_STOP on
 -- :!! # Executes a shell command and returns the output to vsql.
-vsql -A -t  -f /file_to_import/adhoc.sql -o /file_to_import/result.txt -- execute script and have all output in file withou header and footer
+vsql -A -t -d your_database -U your_user -h your_host -w your_password -f /file_to_import/adhoc.sql -o /file_to_import/result.txt -- execute script and have all output in file withou header and footer
