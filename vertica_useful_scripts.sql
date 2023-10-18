@@ -68,6 +68,17 @@ SELECT COMPUTE_FLEXTABLE_KEYS_AND_BUILD_VIEW('flex.dwh_flex');
 CREATE TABLE IF NOT EXISTS src.dwh_table AS SELECT * FROM flex.dwh_flex_view;
 
 
+--- SELECT STATEMENT ---
+--varchar to timestamp
+CASE 
+WHEN ts NOT LIKE '20%' OR ts NOT LIKE '19%' THEN NULL 
+WHEN ts LIKE '____-__-__T__:__:__%__:__' THEN TO_TIMESTAMP(LEFT(ts, 19), 'YYYY-MM-DD"T"HH24:MI:SS') +
+															(CASE WHEN RIGHT(ts, 6) LIKE '+%' THEN 1 ELSE -1 END * TO_NUMBER(SUBSTRING(ts, 21, 2)))/24
+WHEN ts LIKE '____-__-__ __:__:__' THEN TO_TIMESTAMP(ts, 'YYYY-MM-DD HH24:MI:SS') 
+ELSE TO_TIMESTAMP(ts, 'YYYYMMDDHH24MISS')
+END
+
+
 --- VSQL ---
 -- stop on error
 \set ON_ERROR_STOP on
