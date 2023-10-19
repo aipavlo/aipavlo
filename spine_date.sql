@@ -1,4 +1,4 @@
-CREATE TABLE core_3.spine_date (
+CREATE TABLE public.spine_date (
     id INTEGER,
     yyyymm INTEGER
 );
