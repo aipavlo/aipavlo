@@ -8,6 +8,7 @@ SELECT APPROXIMATE_COUNT_DISTINCT(column_name) FROM schema_name.table_name;
 -- RESOURCE POOL
 SELECT pool_name, node_name, max_query_memory_size_kb, max_memory_size_kb, memory_size_actual_kb FROM V_MONITOR.RESOURCE_POOL_STATUS WHERE pool_name='general';
 SELECT name, memorysize, maxmemorysize FROM V_CATALOG.RESOURCE_POOLS;
+SELECT COUNT(1) FROM NODES WHERE NODE_STATE = 'UP';
 
 -- 100 BIGGEST TABLES IN VERTICA DB ACCORDING TO THE TOTAL DISK SPACE
 SELECT anchor_table_schema, anchor_table_name, SUM(used_bytes) AS total_used_bytes
