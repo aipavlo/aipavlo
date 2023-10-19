@@ -1,6 +1,7 @@
 CREATE TABLE public.spine_date (
-    id INTEGER,
-    yyyymm INTEGER
+    id INTEGER NOT NULL,
+    yyyymm INTEGER,
+    CONSTRAINT spine_date_PK PRIMARY KEY (id) ENABLED
 );
 
 INSERT INTO public.spine_date(id, yyyymm) values (1, 200001);
