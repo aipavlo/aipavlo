@@ -8,7 +8,7 @@ CREATE TABLE metadata.sessions
     session_id varchar(80) NOT NULL,
     ts timestamp DEFAULT (now())::timestamptz(6),
     msg varchar(1000),
-    CONSTRAINT sessions_UN UNIQUE (session_id) DISABLED,
+    CONSTRAINT sessions_UN UNIQUE (session_id) ENABLED,
     CONSTRAINT sessions_PK PRIMARY KEY (id) ENABLED
 );
 
