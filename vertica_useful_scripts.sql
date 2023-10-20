@@ -80,7 +80,10 @@ WHEN ts LIKE '____-__-__T__:__:__%__:__' THEN
 WHEN ts LIKE '____-__-__ __:__:__' THEN TO_TIMESTAMP(ts, 'YYYY-MM-DD HH24:MI:SS') 
 ELSE TO_TIMESTAMP(ts, 'YYYYMMDDHH24MISS')
 END
-
+--COUNT HASH OF COLUMNS
+SELECT COUNT(HASH(column1, column2, column3, column4)) FROM your_table;
+--CHECK IF NOT EXISTS AND HANDLE WITH NULL
+NOT EXISTS (SELECT 1 FROM schema_name.table_name t WHERE COALESCE(s.id::varchar, 'default_value_for_duplicates') = COALESCE(t.id::varchar, 'default_value_for_duplicates'))
 
 --- VSQL ---
 -- stop on error
