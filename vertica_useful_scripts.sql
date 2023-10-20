@@ -53,6 +53,7 @@ ALTER TABLE schema_name.table_name ALTER CONSTRAINT table_name_PK ENABLED; -- DI
 DROP SEQUENCE IF EXISTS schema_name.sequence_name;
 CREATE SEQUENCE IF NOT EXISTS schema_name.sequence_name;
 ALTER SEQUENCE schema_name.sequence_name CACHE 1;
+ALTER TABLE schema_name.table_name ALTER COLUMN column_name SET DEFAULT NEXTVAL('schema_name.sequence_name');
 -- FLATTEN TABLE REBUILD WITH PARTITION
 SELECT REFRESH_COLUMNS ('schema_name.table_name', 'column_name1', 'REBUILD',
 TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'),
