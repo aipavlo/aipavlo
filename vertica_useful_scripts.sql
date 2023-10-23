@@ -58,6 +58,10 @@ ALTER TABLE schema_name.table_name ALTER COLUMN column_name SET DEFAULT NEXTVAL(
 SELECT REFRESH_COLUMNS ('schema_name.table_name', 'column_name1', 'REBUILD',
 TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'),
 TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'));
+-- CREATE NEW UNSEGMENTED PROJECTION AND DROP OLD SEGMENTED
+CREATE PROJECTION schema_name.table_name_super_0 AS SELECT * FROM schema_name.table_name ORDER BY table_name.column_with_id UNSEGMENTED ALL NODES;		
+SELECT REFRESH('schema_name.table_name');	
+DROP PROJECTION schema_name.table_name_super;
 
 
 --- FLEX TABLE ---
@@ -84,6 +88,7 @@ END
 SELECT COUNT(HASH(column1, column2, column3, column4)) FROM your_table;
 --CHECK IF NOT EXISTS AND HANDLE WITH NULL
 NOT EXISTS (SELECT 1 FROM schema_name.table_name t WHERE COALESCE(s.id::varchar, 'default_value_for_duplicates') = COALESCE(t.id::varchar, 'default_value_for_duplicates'))
+
 
 --- VSQL ---
 -- stop on error
