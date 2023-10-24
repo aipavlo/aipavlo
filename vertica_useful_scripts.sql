@@ -91,6 +91,18 @@ SELECT COUNT(HASH(column1, column2, column3, column4)) FROM your_table;
 NOT EXISTS (SELECT 1 FROM schema_name.table_name t WHERE COALESCE(s.id::varchar, 'default_value_for_duplicates') = COALESCE(t.id::varchar, 'default_value_for_duplicates'))
 
 
+--- MERGE STATEMENT ---
+MERGE INTO schema_name.target_table AS t2 
+USING schema_name.source_table AS t1
+ON t2.col_pk = t1.col_pk
+WHEN MATCHED THEN 
+    UPDATE SET col1 = t1.col1,
+               col2 = t1.col2
+WHEN NOT MATCHED THEN 
+    INSERT (col1, col2, Metadata)
+    VALUES (t1.col1, t1.col2, Metadata);
+
+
 --- VSQL ---
 -- stop on error
 \set ON_ERROR_STOP on
