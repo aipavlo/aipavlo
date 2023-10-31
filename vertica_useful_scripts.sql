@@ -23,6 +23,13 @@ FROM v_monitor.storage_containers
 ORDER BY used_bytes DESC, total_row_count DESC
 LIMIT 100;
 
+-- BIGGEST TABLES ACCORDING TO PHYSICAL STORAGE
+SELECT anchor_table_name, SUM(used_bytes) AS raw_data_size
+FROM v_monitor.projection_storage
+WHERE anchor_table_schema = 'schema_name'
+GROUP BY anchor_table_name
+ORDER BY 2 DESC;
+
 -- CHECK ACTIVE SESSIONS
 SELECT * FROM v_monitor.query_requests WHERE user_name = 'dbadmin' AND is_executing = 'True';
 
