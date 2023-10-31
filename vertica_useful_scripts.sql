@@ -30,6 +30,12 @@ WHERE anchor_table_schema = 'schema_name'
 GROUP BY anchor_table_name
 ORDER BY 2 DESC;
 
+-- GENERATE SCRIPT FOR AUDIT ALL COLUMNS OF SCHEMA
+SELECT 
+'SELECT '''||column_name||''' AS COLUMN_NAME, '''||table_schema||'.'||table_name||''' as TABLE_NAME, (SELECT SUM(AUDIT_LENGTH('||column_name||')) FROM '||table_schema||'.'||table_name||') AS AUDIT_SUM UNION ALL'
+FROM v_catalog.columns
+WHERE table_schema = 'schema_name';
+
 -- CHECK ACTIVE SESSIONS
 SELECT * FROM v_monitor.query_requests WHERE user_name = 'dbadmin' AND is_executing = 'True';
 
