@@ -103,8 +103,9 @@ END
 --COUNT HASH OF COLUMNS
 SELECT COUNT(HASH(column1, column2, column3, column4)) FROM your_table;
 --CHECK IF NOT EXISTS AND HANDLE WITH NULL
-NOT EXISTS (SELECT 1 FROM schema_name.table_name t WHERE COALESCE(s.id::varchar, 'default_value_for_duplicates') = COALESCE(t.id::varchar, 'default_value_for_duplicates'))
-
+NOT EXISTS (SELECT 1 FROM schema_name.table_name t WHERE COALESCE(s.id::varchar, 'default_value_for_duplicates') = COALESCE(t.id::varchar, 'default_value_for_duplicates'));
+-- TRUNC DATE
+SELECT DATE_TRUNC('SECOND', TIMESTAMP '2023-10-09 07:42:31.894') AS truncated_timestamp;
 
 --- MERGE STATEMENT ---
 MERGE INTO schema_name.target_table AS t2 
