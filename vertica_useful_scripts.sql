@@ -1,5 +1,6 @@
 --- STATISTICS ---
 SELECT AUDIT('public.table_name', 'table', 0, 100);
+SELECT AUDIT('public', 'schema', 0, 100);
 SELECT AUDIT_FLEX('flex.table_name');
 SELECT ANALYZE_STATISTICS('public.table_name');
 SELECT GET_COMPLIANCE_STATUS(); -- check vertica actual audit status 
