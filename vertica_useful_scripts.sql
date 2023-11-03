@@ -102,7 +102,8 @@ CASE
 	ELSE NULL
 END
 --COUNT HASH OF COLUMNS
-SELECT COUNT(HASH(column1, column2, column3, column4)) FROM your_table;
+SELECT COUNT(HASH(col1, col2, col3, col4)) FROM your_table;
+SELECT SHA256(to_char(col1_int)) FROM your_table;
 --CHECK IF NOT EXISTS AND HANDLE WITH NULL
 NOT EXISTS (SELECT 1 FROM schema_name.table_name t WHERE COALESCE(s.id::varchar, 'default_value_for_duplicates') = COALESCE(t.id::varchar, 'default_value_for_duplicates'));
 -- TRUNC DATE
