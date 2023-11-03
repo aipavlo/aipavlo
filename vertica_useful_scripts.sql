@@ -79,6 +79,9 @@ SELECT REFRESH('schema_name.table_name');
 SELECT MAKE_AHM_NOW(); -- Move the AHM to the most recent safe epoch
 DROP PROJECTION schema_name.table_name_super;
 
+--- EXPORT FILES --- 
+EXPORT TO DELIMITED (directory = '/file_to_import/exported/') AS SELECT * FROM schema_name.table_name ORDER BY id;
+EXPORT TO PARQUET (directory = '/file_to_import/exported/') AS SELECT * FROM schema_name.table_name ORDER BY id;
 
 --- FLEX TABLE ---
 --DROP TABLE IF EXISTS flex.dwh_flex;
