@@ -81,6 +81,7 @@ DROP PROJECTION schema_name.table_name_super;
 
 --- EXPORT FILES --- 
 EXPORT TO DELIMITED (directory = '/file_to_import/exported/') AS SELECT * FROM schema_name.table_name ORDER BY id;
+EXPORT TO DELIMITED (directory = '/file_to_import/exported/delta_csv_gz', compression='GZIP') AS SELECT * FROM schema_name.table_name LIMIT 30000;
 EXPORT TO PARQUET (directory = '/file_to_import/exported/') AS SELECT * FROM schema_name.table_name ORDER BY id;
 
 --- FLEX TABLE ---
