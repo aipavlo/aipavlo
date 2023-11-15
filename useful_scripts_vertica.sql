@@ -55,6 +55,15 @@ WHERE SCHEMA_name = 'schema_name' and projection_name like 'table_name%';
 SELECT * FROM table_name.schema_name 
 WHERE lead_storage_oid() = '45035996283468437';
 
+-- SWAP PROJECTIONS
+CREATE TABLE schema_name.table_name_swap LIKE schema_name.table_name INCLUDING PROJECTIONS;
+SELECT MOVE_PARTITIONS_TO_TABLE (
+    'schema_name.table_name',
+    '2023-10-25',
+    '2023-10-30',
+    'schema_name.table_name_swap'
+);
+
 
 --- DDL ---
 -- CHECK ENABLED AND DISABLED CONSTRAINTS
