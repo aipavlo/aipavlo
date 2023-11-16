@@ -134,7 +134,7 @@ WHEN MATCHED THEN
                col2 = t1.col2
 WHEN NOT MATCHED THEN 
     INSERT (col1, col2, Metadata)
-    VALUES (t1.col1, t1.col2, Metadata);
+    VALUES (t1.col1, t1.col2, t1.Metadata);
 
 
 --- VSQL ---
