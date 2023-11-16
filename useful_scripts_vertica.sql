@@ -136,9 +136,5 @@ WHEN NOT MATCHED THEN
     INSERT (col1, col2, Metadata)
     VALUES (t1.col1, t1.col2, t1.Metadata);
 
-
---- VSQL ---
--- stop on error
-\set ON_ERROR_STOP on
--- :!! # Executes a shell command and returns the output to vsql.
-vsql -A -t -d your_database -U your_user -h your_host -w your_password -f /file_to_import/adhoc.sql -o /file_to_import/result.txt -- execute script and have all output in file withou header and footer
+--- INTERESTING ERRORS ---
+/*[Vertica][VJDBC](4711) ERROR: Sequence or IDENTITY/AUTO_INCREMENT column in merge query is not supported*/
