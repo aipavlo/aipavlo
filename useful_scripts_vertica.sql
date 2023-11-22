@@ -44,12 +44,8 @@ WHERE table_schema = 'schema_name';
 
 -- CHECK ACTIVE SESSIONS
 SELECT * FROM v_monitor.query_requests WHERE user_name = 'dbadmin' AND is_executing = 'True';
-
 -- DROP ALL OTHERS SESSIONS
 SELECT CLOSE_ALL_SESSIONS(); -- close all sessions except during session
-
-SELECT EXPORT_OBJECTS( '', 'schema_name.table_name') ; -- export DDL
-
 -- CHECK ALL PROJECTIONS
 SELECT * FROM v_catalog.projections WHERE projection_schema = 'schema_name' AND anchor_table_name = 'table_name';
 -- CHECK ALL ROS CONTAINERS
@@ -58,6 +54,10 @@ WHERE SCHEMA_name = 'schema_name' and projection_name like 'table_name%';
 -- SELECT EXECTLY 1 CONTAINER (CHOOSE FROM PREVIOUS RESULT)
 SELECT * FROM table_name.schema_name 
 WHERE lead_storage_oid() = '45035996283468437';
+-- CHECK STORED PROCEDURES
+SELECT * FROM v_catalog.user_procedures;
+
+SELECT EXPORT_OBJECTS( '', 'schema_name.table_name') ; -- export DDL
 
 -- SWAP PROJECTIONS
 CREATE TABLE schema_name.table_name_swap LIKE schema_name.table_name INCLUDING PROJECTIONS;
