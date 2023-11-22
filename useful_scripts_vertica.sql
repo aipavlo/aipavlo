@@ -14,7 +14,7 @@ SELECT name, memorysize, maxmemorysize FROM V_CATALOG.RESOURCE_POOLS;
 SELECT COUNT(1) FROM NODES WHERE NODE_STATE = 'UP';
 -- CHECK LOCKS ON TABLE
 SELECT * FROM LOCKS 
-WHERE OBJECT_NAME LIKE '%ANC_remittance%';
+WHERE OBJECT_NAME LIKE '%table_name%';
 
 -- 100 BIGGEST TABLES IN VERTICA DB ACCORDING TO THE TOTAL DISK SPACE
 SELECT anchor_table_schema, anchor_table_name, SUM(used_bytes) AS total_used_bytes
