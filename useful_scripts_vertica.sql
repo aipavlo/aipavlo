@@ -88,7 +88,7 @@ TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'),
 TO_CHAR(ADD_MONTHS(current_date, -2),'YYYYMM'));
 -- CREATE NEW UNSEGMENTED PROJECTION AND DROP OLD SEGMENTED
 CREATE PROJECTION schema_name.table_name_super_0 AS SELECT * FROM schema_name.table_name ORDER BY table_name.column_with_id UNSEGMENTED ALL NODES;		
-SELECT REFRESH('schema_name.table_name');
+SELECT REFRESH('schema_name.table_name'); -- refresh all projections of table schema_name.table_name
 SELECT MAKE_AHM_NOW(); -- Move the AHM to the most recent safe epoch
 DROP PROJECTION schema_name.table_name_super;
 
