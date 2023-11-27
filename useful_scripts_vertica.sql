@@ -141,5 +141,5 @@ WHEN NOT MATCHED THEN
     INSERT (col1, col2, Metadata)
     VALUES (t1.col1, t1.col2, t1.Metadata);
 
---- INTERESTING ERRORS ---
+--- SPECIFIC ERRORS ---
 /*[Vertica][VJDBC](4711) ERROR: Sequence or IDENTITY/AUTO_INCREMENT column in merge query is not supported*/
