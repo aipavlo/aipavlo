@@ -98,6 +98,14 @@ EXPORT TO DELIMITED (directory = '/file_to_import/exported/') AS SELECT * FROM s
 EXPORT TO DELIMITED (directory = '/file_to_import/exported/delta_csv_gz', compression='GZIP') AS SELECT * FROM schema_name.table_name LIMIT 30000;
 EXPORT TO PARQUET (directory = '/file_to_import/exported/') AS SELECT * FROM schema_name.table_name ORDER BY id;
 
+--- EXTERNAL TABLE ---
+--DROP TABLE IF EXISTS ext.delta_csv_gz;
+CREATE EXTERNAL TABLE ext.delta_csv_gz (
+	id int, 
+	hash varchar(256)
+	) AS 
+COPY FROM '/file_to_import/*.csv.gz' GZIP DELIMITER ',' ENCLOSED BY '"' SKIP 1;
+
 --- FLEX TABLE ---
 --DROP TABLE IF EXISTS flex.dwh_flex;
 CREATE FLEX TABLE IF NOT EXISTS flex.dwh_flex();
