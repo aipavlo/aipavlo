@@ -1,13 +1,17 @@
 --- STATISTICS ---
+SELECT ANALYZE_STATISTICS('public.table_name');
+SELECT ANALYZE_HISTOGRAM ;
+
 SELECT AUDIT('public.table_name', 'table', 0, 100);
 SELECT AUDIT('public', 'schema', 0, 100);
 SELECT AUDIT_FLEX('flex.table_name');
-SELECT ANALYZE_STATISTICS('public.table_name');
 SELECT GET_COMPLIANCE_STATUS(); -- check vertica actual audit status 
 SELECT AUDIT_LICENSE_SIZE(); -- trigger an immediate audit
-SELECT /*+DEPOT_FETCH(NONE)*/ (SUM(AUDIT_LENGTH(column_name)) )FROM schema_name.table_name;
+SELECT (SUM(AUDIT_LENGTH(column_name)) FROM schema_name.table_name;
+
 SELECT APPROXIMATE_COUNT_DISTINCT(column_name) FROM schema_name.table_name;
 SELECT * FROM dc_refresh_columns; -- CHECK REFRESHES OF FLATTENED TABLES
+
 -- RESOURCE POOL
 SELECT pool_name, node_name, max_query_memory_size_kb, max_memory_size_kb, memory_size_actual_kb FROM V_MONITOR.RESOURCE_POOL_STATUS WHERE pool_name='general';
 SELECT name, memorysize, maxmemorysize FROM V_CATALOG.RESOURCE_POOLS;
