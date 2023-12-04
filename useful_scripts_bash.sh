@@ -12,3 +12,4 @@ vsql -A -t -d your_database -U your_user -h your_host -w your_password -f /file_
 hostname
 # check public IP
 wget -qO- http://ipecho.net/plain
+curl ipinfo.io
