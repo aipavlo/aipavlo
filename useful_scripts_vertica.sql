@@ -1,6 +1,6 @@
 --- STATISTICS ---
 SELECT ANALYZE_STATISTICS('public.table_name');
-SELECT ANALYZE_HISTOGRAM('public.table_name');
+SELECT ANALYZE_HISTOGRAM('public.table_name'); -- alias for ANALYZE_STATISTICS
 
 SELECT AUDIT('public.table_name', 'table', 0, 100);
 SELECT AUDIT('public', 'schema', 0, 100);
