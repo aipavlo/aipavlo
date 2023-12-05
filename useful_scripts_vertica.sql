@@ -154,5 +154,8 @@ WHEN NOT MATCHED THEN
     INSERT (col1, col2, Metadata)
     VALUES (t1.col1, t1.col2, t1.Metadata);
 
+-- Inspects a file in Parquet, ORC, JSON, or Avro format and returns a CREATE TABLE or CREATE EXTERNAL TABLE statement based on its contents.
+SELECT INFER_TABLE_DDL ('/data/restaurants.json' USING PARAMETERS table_name='restaurants', format='json');
+
 --- SPECIFIC ERRORS ---
 /*[Vertica][VJDBC](4711) ERROR: Sequence or IDENTITY/AUTO_INCREMENT column in merge query is not supported*/
