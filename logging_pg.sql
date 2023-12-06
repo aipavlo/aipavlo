@@ -1,4 +1,4 @@
-REATE OR REPLACE FUNCTION metadata.etl_logging(
+CREATE OR REPLACE FUNCTION metadata.etl_logging(
     INOUT _id UUID DEFAULT NULL,
     IN _upd BIGINT DEFAULT NULL,
     IN _ins BIGINT DEFAULT NULL,
