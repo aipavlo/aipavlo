@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS src.dwh_table AS SELECT * FROM flex.dwh_flex_view;
 --- SELECT STATEMENT ---
 --to JSON and back
 WITH tbl AS (SELECT TO_JSON(ROW('text1' as id, 'text2' as id_2)) AS json_message)
-SELECT json_message, MAPLOOKUP(json_message, 'id') AS id, MAPLOOKUP(json_message, 'id_2') AS id_2 FROM tbl
+SELECT json_message, MAPLOOKUP(MapJSONExtractor(json_message), 'id') AS id, MAPLOOKUP(MapJSONExtractor(json_message), 'id_2') AS id_2 FROM tbl
 --varchar to timestamp
 CASE 
 	WHEN ts LIKE '20%' OR ts LIKE '19%' THEN TO_TIMESTAMP(ts, 'YYYYMMDDHH24MISS') 
