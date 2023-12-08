@@ -1,1 +1,4 @@
 docker pull alpine
+
+# delete cache
+apk update && apk install && rm -rf /var/lib/apt/lists/* /var/cache/*
