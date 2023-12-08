@@ -2,3 +2,8 @@ docker pull alpine
 
 # delete cache
 apk update && apk install && rm -rf /var/lib/apt/lists/* /var/cache/*
+
+ENTRYPOINT ["/usr/bin/php", "migrate.pgp"]
+CMD ["up"]
+
+WORKDIR /home/app/
