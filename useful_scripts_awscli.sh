@@ -18,3 +18,6 @@ aws s3 rm s3://your-bucket-name/folder-name/
 
 # check acl
 aws s3api get-bucket-acl --bucket your-bucket-name
+
+# get size of folder
+aws s3 ls --summarize --human-readable --recursive s3://bucket-name/folder-name/ | grep -E 'Total Size' | awk '{print $3, $4}'
