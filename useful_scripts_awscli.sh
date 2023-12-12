@@ -12,6 +12,7 @@ aws s3 ls s3://your-bucket-name
 
 # create folder
 aws s3api put-object --bucket your-bucket-name --key folder-name/
+aws s3api put-object --bucket your-bucket-name --key folder-name/new-folder-name/
 
 # delete folder
 aws s3 rm s3://your-bucket-name/folder-name/
