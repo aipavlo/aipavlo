@@ -139,7 +139,9 @@ END
 SELECT COUNT(HASH(col1, col2, col3, col4)) FROM your_table;
 SELECT SHA256(to_char(col1_int)) FROM your_table;
 --CHECK IF NOT EXISTS AND HANDLE WITH NULL
-NOT EXISTS (SELECT 1 FROM schema_name.table_name t WHERE COALESCE(s.id::varchar, 'default_value_for_duplicates') = COALESCE(t.id::varchar, 'default_value_for_duplicates'));
+NOT EXISTS (SELECT 1 FROM schema_name.table_name t WHERE COALESCE(s.id::varchar, 'default_value_for_duplicates') = COALESCE(t.id::varchar, 'default_value_for_duplicates'))
+--TRY CAST ELSE NULL
+varchar_date::!date
 -- TRUNC DATE
 SELECT DATE_TRUNC('SECOND', TIMESTAMP '2023-10-09 07:42:31.894') AS truncated_timestamp;
 
