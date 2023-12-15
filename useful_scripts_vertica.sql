@@ -62,7 +62,9 @@ WHERE lead_storage_oid() = '45035996283468437';
 SELECT * FROM v_catalog.user_procedures;
 -- CHECK ALL USERS
 SELECT user_name, resource_pool, all_roles, is_super_user, is_locked, lock_time FROM v_catalog.users;
+CREATE ROLE etl;
 CREATE USER etl_vsql;
+GRANT etl TO etl_vsql;
 ALTER USER ExistingUserDemo IDENTIFIED BY 'newpassword';
 
 
