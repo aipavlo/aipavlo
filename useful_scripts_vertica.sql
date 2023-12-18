@@ -85,6 +85,10 @@ SELECT MOVE_PARTITIONS_TO_TABLE (
 
 -- PARTITIONS
 SELECT DUMP_TABLE_PARTITION_KEYS('schema_name.table_name');
+ALTER TABLE schema_name.table_name
+PARTITION BY (date_part('year', table_name.ts))
+GROUP BY (date_part('year', table_name.ts))
+REORGANIZE;
 
 
 --- DDL ---
