@@ -83,6 +83,9 @@ SELECT MOVE_PARTITIONS_TO_TABLE (
     'schema_name.table_name_swap'
 );
 
+-- PARTITIONS
+SELECT DUMP_TABLE_PARTITION_KEYS('schema_name.table_name');
+
 
 --- DDL ---
 -- CHECK ENABLED AND DISABLED CONSTRAINTS
