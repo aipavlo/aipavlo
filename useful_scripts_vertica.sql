@@ -67,7 +67,7 @@ CREATE USER etl_vsql;
 GRANT etl TO etl_vsql;
 ALTER USER ExistingUserDemo IDENTIFIED BY 'newpassword';
 -- CHECK ALL LOCATIONS
-CREATE LOCATION 's3://<name>/<path>/' USAGE 'USER' LABEL 's3_test';
+CREATE LOCATION 's3://<name>/<path>/' SHARED USAGE 'USER' LABEL 's3_test';
 SELECT * FROM v_catalog.storage_locations;
 GRANT READ ON LOCATION 's3://<name>/<path>/' TO etl_vsql;
 
