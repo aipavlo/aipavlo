@@ -126,7 +126,8 @@ CREATE EXTERNAL TABLE ext.delta_csv_gz (
 	id int, 
 	hash varchar(256)
 	) AS 
-COPY FROM '/file_to_import/*.csv.gz' GZIP DELIMITER ',' ENCLOSED BY '"' SKIP 1;
+COPY FROM '/file_to_import/*.csv.gz' GZIP DELIMITER ',' ENCLOSED BY '"' SKIP 1
+REJECTED DATA AS TABLE metadata.rejected_copy_test;
 
 --- FLEX TABLE ---
 --DROP TABLE IF EXISTS flex.dwh_flex;
