@@ -26,3 +26,10 @@ curl ipinfo.io
 
 export DBNAME=dbname
 tail -n 500 /data/vertica/${DBNAME}/v_${DBNAME}_node0001_catalog/vertica.log
+
+# Search for 'ERROR' messages
+grep '<ERROR>' /data/vertica/${DBNAME}/v_${DBNAME}_node0001_catalog/vertica.log
+# Search for 'PANIC' messages
+grep '<PANIC>' /data/vertica/${DBNAME}/v_${DBNAME}_node0001_catalog/vertica.log
+# Search for 'FATAL' messages
+grep '<FATAL>' /data/vertica/${DBNAME}/v_${DBNAME}_node0001_catalog/vertica.log
