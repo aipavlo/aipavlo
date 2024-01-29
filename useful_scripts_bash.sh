@@ -25,4 +25,4 @@ wget -qO- http://ipecho.net/plain
 curl ipinfo.io
 
 export DBNAME=dbname
-tail -n 500 /data/vertica/DBNAME/v_DBNAME_node0001_catalog/vertica.log
+tail -n 500 /data/vertica/${DBNAME}/v_${DBNAME}_node0001_catalog/vertica.log
