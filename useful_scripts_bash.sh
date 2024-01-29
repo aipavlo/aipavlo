@@ -23,3 +23,6 @@ hostname
 # check public IP
 wget -qO- http://ipecho.net/plain
 curl ipinfo.io
+
+export DBNAME=dbname
+tail -n 500 /data/vertica/DBNAME/v_DBNAME_node0001_catalog/vertica.log
