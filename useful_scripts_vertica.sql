@@ -53,6 +53,15 @@ WHERE table_schema = 'schema_name';
 SELECT * FROM v_monitor.query_requests WHERE user_name = 'dbadmin' AND is_executing = 'True';
 -- DROP ALL OTHERS SESSIONS
 SELECT CLOSE_ALL_SESSIONS(); -- close all sessions except during session
+-- CHECK DATACOLLECTOR ERRORS
+SELECT 
+"time", user_name, transaction_id, line_number, function_name, message, error_code, vertica_code, detail, hint, log_message, log_detail, log_hint, log_context, error_level_name, cursor_position
+FROM dc_errors 
+WHERE 1=1
+AND error_level_name NOT IN ('INFO', 'NOTICE')
+AND time::date = '2024-01-29'::date 
+AND log_message NOT LIKE '%does not exist'
+ORDER BY time desc ;
 -- CHECK ALL PROJECTIONS
 SELECT * FROM v_catalog.projections WHERE projection_schema = 'schema_name' AND anchor_table_name = 'table_name';
 -- CHECK ALL ROS CONTAINERS
