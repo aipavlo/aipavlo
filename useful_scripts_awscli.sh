@@ -30,3 +30,5 @@ aws s3 cp s3://mybucket/myfile ./myfile
 aws s3 ls --summarize --human-readable --recursive s3://bucket-name/folder-name/
 # get size only inside folder
 aws s3 ls --summarize --human-readable --recursive s3://bucket-name/folder-name/ | grep -E 'Total Size' | awk '{print $3, $4}'
+# count quantity of all files inside folder
+aws s3 ls s3://bucket-name/folder-name/ --recursive | wc -l
