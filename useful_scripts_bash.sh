@@ -1,6 +1,15 @@
 # CHECK FIRST ROW OF CSV.GZ FILE
  zcat dwh.csv.gz | head -n 1
 
+# Get the start timestamp
+start_time=$(date +%s)
+# Get the end timestamp
+end_time=$(date +%s)
+# Calculate the duration in seconds
+duration=$((end_time - start_time))
+echo "Start timestamp: $(date -d @$start_time)"
+echo "End timestamp: $(date -d @$end_time)"
+echo "Duration: $duration seconds"
  
 ### VSQL ###
 # stop on error
