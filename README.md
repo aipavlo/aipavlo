@@ -11,15 +11,17 @@ I am a professional data engineer and DWH developer with extensive experience in
 
 
 
-### Basic Commands for working with git
 
-https://github.com/aipavlo/aipavlo/blob/main/git_commands
 
 
 <!--
 **aipavlo/aipavlo** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
 Here are some ideas to get you started:
+
+### Basic Commands for working with git
+
+https://github.com/aipavlo/aipavlo/blob/main/git_commands
 
 - 🔭 I’m currently working on ...
 - 🌱 I’m currently learning ...
