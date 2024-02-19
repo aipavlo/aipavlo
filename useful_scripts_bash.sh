@@ -6,6 +6,14 @@ done <<< "$files"
 # CHECK FIRST ROW OF CSV.GZ FILE
  zcat dwh.csv.gz | head -n 1
 
+# multiprocess each command
+count_loop=0
+for command in $command_to_process; do
+   process_command "$command" &
+   let count_loop+=1
+   [[ $((count_loop%2)) -eq 0 ]] && wait
+done
+
 # get timestamp
 datetime=$(date +"%Y%m%d_%H%M%S")
 
