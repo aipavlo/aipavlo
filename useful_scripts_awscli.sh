@@ -34,4 +34,25 @@ aws s3 ls --summarize --human-readable --recursive s3://bucket-name/folder-name/
 aws s3 ls s3://bucket-name/folder-name/ --recursive | wc -l
 
 # get names of all files inside folder
-aws s3 ls s3://bucket-name/folder-name/ | awk '{if($2) print $2}' 
+aws s3 ls s3://bucket-name/folder-name/ | awk '{if($2) print $2}'
+
+
+# Function to get the names of files to copy from the S3 bucket
+get_files_to_copy_from_s3() {
+    file_prefix=$1
+    target_date=$2
+    local s3_path="s3://$S3_BUCKET/$MAIN_FOLDER_PATH/$INCOME_FOLDER/"
+    local files=$(aws s3 ls "$s3_path" | awk '{print $4}')
+
+    if [[ $? -ne 0 ]]; then
+        send_notification "<ERROR> Failed to list files from $s3_path"
+        exit 1
+    fi
+
+    if [[ -n "$file_prefix" || -n "$target_date" ]]; then
+        printf "%s\n" "$files" | grep "${file_prefix}.*${target_date}"
+    else
+        printf "%s\n" "$files"
+    fi
+}
+FILES_FROM_S3=$(get_files_to_copy_from_s3 file_prefix target_date)
