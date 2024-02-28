@@ -55,4 +55,4 @@ get_files_to_copy_from_s3() {
         printf "%s\n" "$files"
     fi
 }
-FILES_FROM_S3=$(get_files_to_copy_from_s3 file_prefix target_date)
+FILES_FROM_S3=$(get_files_to_copy_from_s3 PREFIX DATE)
