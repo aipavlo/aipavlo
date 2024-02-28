@@ -45,7 +45,7 @@ get_files_to_copy_from_s3() {
     local files=$(aws s3 ls "$s3_path" | awk '{print $4}')
 
     if [[ $? -ne 0 ]]; then
-        send_notification "<ERROR> Failed to list files from $s3_path"
+        echo "<ERROR> Failed to list files from $s3_path"
         exit 1
     fi
 
