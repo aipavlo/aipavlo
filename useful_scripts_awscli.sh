@@ -13,6 +13,9 @@ aws s3 ls s3://your-bucket-name
 # move all files from one folder to another inside one bucket
 aws s3 mv s3://bucket-name/source-folder/ s3://bucket-name/destination-folder/ --recursive
 
+# move file without copying metadata
+aws s3 mv s3://bucket-name/source-folder/ s3://bucket-name/destination-folder/ --copy-props none
+
 # create folder
 aws s3api put-object --bucket your-bucket-name --key folder-name/
 aws s3api put-object --bucket your-bucket-name --key folder-name/new-folder-name/
