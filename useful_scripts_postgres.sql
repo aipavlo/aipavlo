@@ -24,3 +24,14 @@ FROM (
 WHERE schema_name NOT LIKE 'pg_%'
 ORDER BY table_size desc
 ;
+
+WITH numbered_rows AS (
+    SELECT id,
+           id_source,
+           row_number() OVER (PARTITION BY id_source ORDER BY id DESC) AS new_rn
+    FROM your_table_name
+)
+UPDATE your_table_name AS t
+SET rn = nr.new_rn
+FROM numbered_rows AS nr
+WHERE t.id = nr.id;
