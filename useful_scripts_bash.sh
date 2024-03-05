@@ -14,6 +14,11 @@ for command in $command_to_process; do
    [[ $((count_loop%2)) -eq 0 ]] && wait
 done
 
+# echo on each line
+for i in {01..12}; do
+    echo "$i"
+done
+
 # get timestamp
 datetime=$(date +"%Y%m%d_%H%M%S")
 
