@@ -18,6 +18,11 @@ logging.basicConfig(filename='app.log', level=logging.INFO)
 
 start_date = datetime.date(2024, 1, 1)
 end_date = datetime.date(2024, 12, 31)
+hostname = 'your_hostname'
+username = 'your_username'
+password = 'your_password'
+private_key_path = 'your_private_key_path'
+table_name = 'your_table'
 
 class DataExporter:
     def __init__(self, start_date, end_date):
