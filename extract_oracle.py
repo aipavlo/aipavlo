@@ -50,3 +50,37 @@ def export_to_csv(db_connect, table_name, start_date, end_date):
                 push_to_server(filename, 'hostname', 'username', 'password')
 
 export_to_csv(db_connect, 'your_table', start_date, end_date)
+
+
+
+import unittest
+from unittest.mock import patch, MagicMock
+
+class TestExportToCSV(unittest.TestCase):
+    @patch('builtins.open', new_callable=unittest.mock.mock_open)
+    @patch('csv.writer')
+    @patch('cx_Oracle.connect')
+    def test_export_to_csv(self, mock_connect, mock_writer, mock_open):
+        # Mock the database connection and cursor
+        mock_cursor = MagicMock()
+        mock_connect.return_value.cursor.return_value = mock_cursor
+        mock_cursor.description = [('column1',), ('column2',)]
+        mock_cursor.fetchmany.side_effect = [[('data1', 'data2')], []]
+
+        # Call the function with the mocked dependencies
+        export_to_csv(mock_connect, 'table_name', datetime.date(2024, 1, 1), datetime.date(2024, 12, 31))
+
+        # Assert that the correct SQL was executed
+        mock_cursor.execute.assert_called_once_with(
+            "SELECT * FROM table_name WHERE DT BETWEEN :start_day AND :end_day",
+            start_day=datetime.date(2024, 1, 1),
+            end_day=datetime.date(2024, 12, 31)
+        )
+
+        # Assert that the CSV writer was called with the correct arguments
+        mock_writer.assert_called_once_with(mock_open.return_value, quoting=csv.QUOTE_NONNUMERIC)
+        mock_writer.return_value.writerow.assert_called_once_with(['column1', 'column2'])
+        mock_writer.return_value.writerows.assert_called_once_with([('data1', 'data2')])
+
+if __name__ == '__main__':
+    unittest.main()
