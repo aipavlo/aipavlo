@@ -52,23 +52,22 @@ class DataExporter:
                 hash_func.update(chunk)
         return hash_func.hexdigest()
 
-    def push_to_server(filename, hostname, username, password, private_key_path):
+def push_to_server(self, filename, hostname, username, password, private_key_path):
         ssh = SSHClient()
         ssh.load_system_host_keys()
         
         # Load the private key
         private_key = RSAKey(filename=private_key_path, password='your_password')
     
-        ssh.connect(hostname, username=username, pkey=private_key)
-        with SCPClient(ssh.get_transport()) as scp:
-            scp.put(filename + '.zip')
+        with ssh:
+            ssh.connect(hostname, username=username, pkey=private_key)
+            with SCPClient(ssh.get_transport()) as scp:
+                scp.put(filename + '.zip')
     
-        # Compute and print the hash of the file on the remote server
-        stdin, stdout, stderr = ssh.exec_command(f"sha256sum {filename}.zip")
-        hash_after = stdout.read().split()[0].decode()
-        print(f'Hash after receiving: {hash_after}')
-    
-        ssh.close()
+            # Compute and print the hash of the file on the remote server
+            stdin, stdout, stderr = ssh.exec_command(f"sha256sum {filename}.zip")
+            hash_after = stdout.read().split()[0].decode()
+            logging.info(f'Hash after receiving: {hash_after}')
     
         return hash_after
 
@@ -80,22 +79,26 @@ class DataExporter:
                 for single_date in (start_date + datetime.timedelta(n) for n in range(int ((end_date - start_date).days))):
                     formatted_day = single_date.strftime("%Y%m%d")
                     filename = f"{table_name}.{formatted_day}.csv"
-                    with open(filename, "w", newline="", encoding="utf-8") as csvfile:
-                        writer = csv.writer(csvfile, quoting=csv.QUOTE_NONNUMERIC)
-                        
-                        # Execute the query
-                        cursor.execute(sql, start_day=start_date, end_date=end_date)
-                        
-                        # Get column names
-                        column_names = [column[0] for column in cursor.description]
-                        writer.writerow(column_names)  # Write column headers
-                        
-                        # Fetch data in batches
-                        while True:
-                            rows = cursor.fetchmany(1000)  # Adjust size as needed
-                            if not rows:
-                                break
-                            writer.writerows(rows)  # Write data rows
+                    try:
+                        with open(filename, "w", newline="", encoding="utf-8") as csvfile:
+                            writer = csv.writer(csvfile, quoting=csv.QUOTE_NONNUMERIC)
+                            
+                            # Execute the query
+                            cursor.execute(sql, start_day=start_date, end_date=end_date)
+                            
+                            # Get column names
+                            column_names = [column[0] for column in cursor.description]
+                            writer.writerow(column_names)  # Write column headers
+                            
+                            # Fetch data in batches
+                            while True:
+                                rows = cursor.fetchmany(1000)  # Adjust size as needed
+                                if not rows:
+                                    break
+                                writer.writerows(rows)  # Write data rows
+                    except IOError as e:
+                        logging.error(f"Failed to open file: {e}")
+                        raise
     
                     # Archive the file
                     shutil.make_archive(filename, 'zip', '.', filename)
