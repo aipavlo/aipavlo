@@ -4,12 +4,25 @@ import datetime
 import unittest
 import os
 import shutil
+import hashlib
 from paramiko import SSHClient
 from scp import SCPClient
 
 db_connect = cx_Oracle.connect('user/pass@hostname:port/service_name')
 start_date = datetime.date(2024, 1, 1)
 end_date = datetime.date(2024, 12, 31)
+
+def compute_hash(filename):
+    # Use SHA256 hash algorithm
+    hash_func = hashlib.sha256()
+
+    # Read the file in binary mode and update the hash
+    with open(filename, 'rb') as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_func.update(chunk)
+
+    # Return the hexadecimal representation of the hash
+    return hash_func.hexdigest()
 
 def push_to_server(filename, hostname, username, password):
     ssh = SSHClient()
@@ -46,8 +59,22 @@ def export_to_csv(db_connect, table_name, start_date, end_date):
                 # Archive the file
                 shutil.make_archive(filename, 'zip', '.', filename)
 
+                # Compute and print the hash of the file before sending
+                hash_before = compute_hash(filename + '.zip')
+                print(f'Hash before sending: {hash_before}')
+                
                 # Push the file to another server
                 push_to_server(filename, 'hostname', 'username', 'password')
+                
+                # Compute and print the hash of the file after receiving
+                hash_after = compute_hash(filename + '.zip')
+                print(f'Hash after receiving: {hash_after}')
+            
+                # Check if the hashes match
+                if hash_before == hash_after:
+                    print('The file was transferred successfully.')
+                else:
+                    print('The file was corrupted during transfer.')
 
 export_to_csv(db_connect, 'your_table', start_date, end_date)
 
