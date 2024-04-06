@@ -30,6 +30,7 @@ def get_db_connection():
         return cx_Oracle.connect(f'{user}/{password}@{hostname}:{port}/{service_name}')
     except cx_Oracle.DatabaseError as e:
         print(f"Failed to connect to the database: {e}")
+        raise
 
 def compute_hash(filename):
     # Use SHA256 hash algorithm
