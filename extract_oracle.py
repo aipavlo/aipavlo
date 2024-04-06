@@ -5,11 +5,16 @@ import unittest
 import os
 import shutil
 import hashlib
-from paramiko import SSHClient
+import logging
+from paramiko import SSHClient, RSAKey
 from scp import SCPClient
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
+
+# Set up logging
+logging.basicConfig(filename='app.log', level=logging.INFO)
 
 start_date = datetime.date(2024, 1, 1)
 end_date = datetime.date(2024, 12, 31)
@@ -104,8 +109,11 @@ def export_to_csv(db_connect, table_name, start_date, end_date):
                     print('The file was corrupted during transfer.')
 
 if __name__ == "__main__":
-    with get_db_connection() as db_connect:
-        export_to_csv(db_connect, 'your_table', start_date, end_date)
+    try:
+        with get_db_connection() as db_connect:
+            export_to_csv(db_connect, 'your_table', start_date, end_date)
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
 
 
 
