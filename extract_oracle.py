@@ -17,6 +17,8 @@ def get_db_connection():
     hostname = os.getenv('DB_HOSTNAME')
     port = os.getenv('DB_PORT')
     service_name = os.getenv('DB_SERVICE_NAME')
+    if not all([user, password, hostname, port, service_name]):
+        raise ValueError("One or more database connection parameters are not set.")
     try:
         return cx_Oracle.connect(f'{user}/{password}@{hostname}:{port}/{service_name}')
     except cx_Oracle.DatabaseError as e:
@@ -30,14 +32,16 @@ def compute_hash(filename):
     with open(filename, 'rb') as f:
         for chunk in iter(lambda: f.read(4096), b""):
             hash_func.update(chunk)
-
-    # Return the hexadecimal representation of the hash
     return hash_func.hexdigest()
 
-def push_to_server(filename, hostname, username, password):
+def push_to_server(filename, hostname, username, password, private_key_path):
     ssh = SSHClient()
     ssh.load_system_host_keys()
-    ssh.connect(hostname, username=username, password=password)
+    
+    # Load the private key
+    private_key = RSAKey(filename=private_key_path, password='your_password')
+
+    ssh.connect(hostname, username=username, pkey=private_key)
     with SCPClient(ssh.get_transport()) as scp:
         scp.put(filename + '.zip')
 
