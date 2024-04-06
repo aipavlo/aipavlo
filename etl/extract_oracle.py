@@ -29,6 +29,7 @@ class DataExporter:
         self.start_date = start_date
         self.end_date = end_date
 
+    @staticmethod
     def get_db_connection():
         """
         Establishes a connection to the Oracle database using the connection details stored in environment variables.
@@ -44,9 +45,10 @@ class DataExporter:
         try:
             return cx_Oracle.connect(f'{user}/{password}@{hostname}:{port}/{service_name}')
         except cx_Oracle.DatabaseError as e:
-            print(f"Failed to connect to the database: {e}")
+            logging.error(f"Failed to connect to the database: {e}")
             raise
 
+    @staticmethod
     def compute_hash(filename):
         # Use SHA256 hash algorithm
         hash_func = hashlib.sha256()
@@ -57,25 +59,27 @@ class DataExporter:
                 hash_func.update(chunk)
         return hash_func.hexdigest()
 
-    def push_to_server(self, filename, hostname, username, password, private_key_path):
-            ssh = SSHClient()
-            ssh.load_system_host_keys()
+    @staticmethod
+    def push_to_server(filename, hostname, username, password, private_key_path):
+        ssh = SSHClient()
+        ssh.load_system_host_keys()
             
-            # Load the private key
-            private_key = RSAKey(filename=private_key_path, password='your_password')
+        # Load the private key
+        private_key = RSAKey(filename=private_key_path, password='your_password')
         
-            with ssh:
-                ssh.connect(hostname, username=username, pkey=private_key)
-                with SCPClient(ssh.get_transport()) as scp:
-                    scp.put(filename + '.zip')
+        with ssh:
+            ssh.connect(hostname, username=username, pkey=private_key)
+            with SCPClient(ssh.get_transport()) as scp:
+                scp.put(filename + '.zip')
         
-                # Compute and print the hash of the file on the remote server
-                stdin, stdout, stderr = ssh.exec_command(f"sha256sum {filename}.zip")
-                hash_after = stdout.read().split()[0].decode()
-                logging.info(f'Hash after receiving: {hash_after}')
+            # Compute and print the hash of the file on the remote server
+            stdin, stdout, stderr = ssh.exec_command(f"sha256sum {filename}.zip")
+            hash_after = stdout.read().split()[0].decode()
+            logging.info(f'Hash after receiving: {hash_after}')
         
-            return hash_after
+        return hash_after
 
+    @staticmethod
     def export_to_csv(db_connect, table_name, start_date, end_date):
         sql = f"SELECT * FROM {table_name} WHERE DT BETWEEN :start_day AND :end_day"
         # Connect to the database
@@ -89,7 +93,7 @@ class DataExporter:
                             writer = csv.writer(csvfile, quoting=csv.QUOTE_NONNUMERIC)
                             
                             # Execute the query
-                            cursor.execute(sql, start_day=start_date, end_date=end_date)
+                            cursor.execute(sql, start_day=start_date, end_day=end_date)
                             
                             # Get column names
                             column_names = [column[0] for column in cursor.description]
@@ -109,11 +113,11 @@ class DataExporter:
                     shutil.make_archive(filename, 'zip', '.', filename)
     
                     # Compute and print the hash of the file before sending
-                    hash_before = compute_hash(filename + '.zip')
+                    hash_before = DataExporter.compute_hash(filename + '.zip')
                     print(f'Hash before sending: {hash_before}')
                     
                     # Push the file to another server and get the hash after receiving
-                    hash_after = push_to_server(filename, 'hostname', 'username', 'password')
+                    hash_after = DataExporter.push_to_server(filename, hostname, username, password, private_key_path)
                 
                     # Check if the hashes match
                     if hash_before == hash_after:
@@ -125,7 +129,7 @@ if __name__ == "__main__":
     exporter = DataExporter(start_date, end_date)
     try:
         with exporter.get_db_connection() as db_connect:
-            exporter.export_to_csv(db_connect, 'your_table')
+            exporter.export_to_csv(db_connect, 'your_table', start_date, end_date)
     except Exception as e:
         logging.error(f"An error occurred: {e}")
 
