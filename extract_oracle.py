@@ -15,6 +15,10 @@ start_date = datetime.date(2024, 1, 1)
 end_date = datetime.date(2024, 12, 31)
 
 def get_db_connection():
+    """
+    Establishes a connection to the Oracle database using the connection details stored in environment variables.
+    Returns the connection object if successful, otherwise raises an exception.
+    """
     user = os.getenv('DB_USER')
     password = os.getenv('DB_PASSWORD')
     hostname = os.getenv('DB_HOSTNAME')
