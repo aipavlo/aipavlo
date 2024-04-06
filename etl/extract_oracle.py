@@ -57,24 +57,24 @@ class DataExporter:
                 hash_func.update(chunk)
         return hash_func.hexdigest()
 
-def push_to_server(self, filename, hostname, username, password, private_key_path):
-        ssh = SSHClient()
-        ssh.load_system_host_keys()
+    def push_to_server(self, filename, hostname, username, password, private_key_path):
+            ssh = SSHClient()
+            ssh.load_system_host_keys()
+            
+            # Load the private key
+            private_key = RSAKey(filename=private_key_path, password='your_password')
         
-        # Load the private key
-        private_key = RSAKey(filename=private_key_path, password='your_password')
-    
-        with ssh:
-            ssh.connect(hostname, username=username, pkey=private_key)
-            with SCPClient(ssh.get_transport()) as scp:
-                scp.put(filename + '.zip')
-    
-            # Compute and print the hash of the file on the remote server
-            stdin, stdout, stderr = ssh.exec_command(f"sha256sum {filename}.zip")
-            hash_after = stdout.read().split()[0].decode()
-            logging.info(f'Hash after receiving: {hash_after}')
-    
-        return hash_after
+            with ssh:
+                ssh.connect(hostname, username=username, pkey=private_key)
+                with SCPClient(ssh.get_transport()) as scp:
+                    scp.put(filename + '.zip')
+        
+                # Compute and print the hash of the file on the remote server
+                stdin, stdout, stderr = ssh.exec_command(f"sha256sum {filename}.zip")
+                hash_after = stdout.read().split()[0].decode()
+                logging.info(f'Hash after receiving: {hash_after}')
+        
+            return hash_after
 
     def export_to_csv(db_connect, table_name, start_date, end_date):
         sql = f"SELECT * FROM {table_name} WHERE DT BETWEEN :start_day AND :end_day"
