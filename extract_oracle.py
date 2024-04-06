@@ -8,7 +8,6 @@ import hashlib
 from paramiko import SSHClient
 from scp import SCPClient
 
-db_connect = cx_Oracle.connect('user/pass@hostname:port/service_name')
 start_date = datetime.date(2024, 1, 1)
 end_date = datetime.date(2024, 12, 31)
 
