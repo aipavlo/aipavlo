@@ -1,24 +1,36 @@
 import cx_Oracle
 import csv
 import datetime
+import unittest
 
-# Connect to Oracle (replace with your credentials)
-connection = cx_Oracle.connect('user/pass@hostname:port/service_name')
-cursor = connection.cursor()
+db_connect = cx_Oracle.connect('user/pass@hostname:port/service_name')
+sql = "SELECT * FROM your_table WHERE DT BETWEEN :start_day AND :end_day"
+start_date = datetime.date(2024, 1, 1)
+end_date = datetime.date(2024, 12, 31)
 
-# Define your SQL query (modify as needed)
-sql = "SELECT * FROM your_table WHERE DT = :day"
+def export_to_csv(db_connect, sql, start_date, end_date):
+    # Connect to the database
+    with db_connect as connection:
+        with connection.cursor() as cursor:
+            for single_date in (start_date + datetime.timedelta(n) for n in range(int ((end_date - start_date).days))):
+                formatted_day = single_date.strftime("%Y%m%d")
+                filename = f"schema.table.{formatted_day}.csv"
+                with open(filename, "w", newline="", encoding="utf-8") as csvfile:
+                    writer = csv.writer(csvfile, quoting=csv.QUOTE_NONNUMERIC)
+                    
+                    # Execute the query
+                    cursor.execute(sql, start_day=start_date, end_date=end_date)
+                    
+                    # Get column names
+                    column_names = [column[0] for column in cursor.description]
+                    writer.writerow(column_names)  # Write column headers
+                    
+                    # Fetch data in batches
+                    while True:
+                        rows = cursor.fetchmany(1000)  # Adjust size as needed
+                        if not rows:
+                            break
+                        writer.writerows(rows)  # Write data rows
 
-# Iterate over days and create CSV files
-for day in range(1, 32):  # Assuming days in a month
-    formatted_day = datetime.date.today().replace(day=day).strftime("%Y%m%d")
-    filename = f"schema.table.{formatted_day}.csv"
-    with open(filename, "w", newline="") as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(["column1", "column2", ...])  # Write column headers
-        cursor.execute(sql, day=day)
-        writer.writerows(cursor.fetchall())  # Write data rows
 
-# Close the cursor and connection
-cursor.close()
-connection.close()
+export_to_csv(db_connect, sql, start_date, end_date)
