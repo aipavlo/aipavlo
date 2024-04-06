@@ -1,7 +1,6 @@
 import cx_Oracle
 import csv
 import datetime
-import unittest
 import os
 import shutil
 import hashlib
@@ -16,13 +15,14 @@ load_dotenv()
 # Set up logging
 logging.basicConfig(filename='app.log', level=logging.INFO)
 
-start_date = datetime.date(2024, 1, 1)
-end_date = datetime.date(2024, 12, 31)
-hostname = 'your_hostname'
-username = 'your_username'
-password = 'your_password'
-private_key_path = 'your_private_key_path'
-table_name = 'your_table'
+# Constants
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOSTNAME = os.getenv('DB_HOSTNAME')
+DB_PORT = os.getenv('DB_PORT')
+DB_SERVICE_NAME = os.getenv('DB_SERVICE_NAME')
+PRIVATE_KEY_PATH = 'your_private_key_path'
+TABLE_NAME = 'your_table'
 
 class DataExporter:
     def __init__(self, start_date, end_date):
@@ -35,25 +35,20 @@ class DataExporter:
         Establishes a connection to the Oracle database using the connection details stored in environment variables.
         Returns the connection object if successful, otherwise raises an exception.
         """
-        user = os.getenv('DB_USER')
-        password = os.getenv('DB_PASSWORD')
-        hostname = os.getenv('DB_HOSTNAME')
-        port = os.getenv('DB_PORT')
-        service_name = os.getenv('DB_SERVICE_NAME')
-        if not all([user, password, hostname, port, service_name]):
+        if not all([DB_USER, DB_PASSWORD, DB_HOSTNAME, DB_PORT, DB_SERVICE_NAME]):
             raise ValueError("One or more database connection parameters are not set.")
         try:
-            return cx_Oracle.connect(f'{user}/{password}@{hostname}:{port}/{service_name}')
+            return cx_Oracle.connect(f'{DB_USER}/{DB_PASSWORD}@{DB_HOSTNAME}:{DB_PORT}/{DB_SERVICE_NAME}')
         except cx_Oracle.DatabaseError as e:
             logging.error(f"Failed to connect to the database: {e}")
             raise
 
     @staticmethod
     def compute_hash(filename):
-        # Use SHA256 hash algorithm
+        """
+        Compute the hash of a file.
+        """
         hash_func = hashlib.sha256()
-    
-        # Read the file in binary mode and update the hash
         with open(filename, 'rb') as f:
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_func.update(chunk)
@@ -61,75 +56,62 @@ class DataExporter:
 
     @staticmethod
     def push_to_server(filename, hostname, username, password, private_key_path):
+        """
+        Push a file to a server using SSH.
+        """
         ssh = SSHClient()
         ssh.load_system_host_keys()
-            
-        # Load the private key
-        private_key = RSAKey(filename=private_key_path, password='your_password')
-        
+        private_key = RSAKey(filename=private_key_path, password=password)
         with ssh:
             ssh.connect(hostname, username=username, pkey=private_key)
             with SCPClient(ssh.get_transport()) as scp:
                 scp.put(filename + '.zip')
-        
-            # Compute and print the hash of the file on the remote server
             stdin, stdout, stderr = ssh.exec_command(f"sha256sum {filename}.zip")
             hash_after = stdout.read().split()[0].decode()
             logging.info(f'Hash after receiving: {hash_after}')
-        
         return hash_after
 
     @staticmethod
     def export_to_csv(db_connect, table_name, start_date, end_date):
+        """
+        Export data from Oracle database to CSV files.
+        """
         sql = f"SELECT * FROM {table_name} WHERE DT BETWEEN :start_day AND :end_day"
-        # Connect to the database
         with db_connect as connection:
             with connection.cursor() as cursor:
-                for single_date in (start_date + datetime.timedelta(n) for n in range(int ((end_date - start_date).days))):
+                for single_date in (start_date + datetime.timedelta(n) for n in range(int((end_date - start_date).days))):
                     formatted_day = single_date.strftime("%Y%m%d")
                     filename = f"{table_name}.{formatted_day}.csv"
                     try:
                         with open(filename, "w", newline="", encoding="utf-8") as csvfile:
                             writer = csv.writer(csvfile, quoting=csv.QUOTE_NONNUMERIC)
-                            
-                            # Execute the query
                             cursor.execute(sql, start_day=start_date, end_day=end_date)
-                            
-                            # Get column names
                             column_names = [column[0] for column in cursor.description]
-                            writer.writerow(column_names)  # Write column headers
-                            
-                            # Fetch data in batches
+                            writer.writerow(column_names)
                             while True:
-                                rows = cursor.fetchmany(1000)  # Adjust size as needed
+                                rows = cursor.fetchmany(1000)
                                 if not rows:
                                     break
-                                writer.writerows(rows)  # Write data rows
+                                writer.writerows(rows)
                     except IOError as e:
                         logging.error(f"Failed to open file: {e}")
                         raise
-    
-                    # Archive the file
                     shutil.make_archive(filename, 'zip', '.', filename)
-    
-                    # Compute and print the hash of the file before sending
                     hash_before = DataExporter.compute_hash(filename + '.zip')
                     print(f'Hash before sending: {hash_before}')
-                    
-                    # Push the file to another server and get the hash after receiving
-                    hash_after = DataExporter.push_to_server(filename, hostname, username, password, private_key_path)
-                
-                    # Check if the hashes match
+                    hash_after = DataExporter.push_to_server(filename, 'hostname', 'username', 'password', PRIVATE_KEY_PATH)
                     if hash_before == hash_after:
                         print('The file was transferred successfully.')
                     else:
                         print('The file was corrupted during transfer.')
 
 if __name__ == "__main__":
+    start_date = datetime.date(2024, 1, 1)
+    end_date = datetime.date(2024, 12, 31)
     exporter = DataExporter(start_date, end_date)
     try:
         with exporter.get_db_connection() as db_connect:
-            exporter.export_to_csv(db_connect, 'your_table', start_date, end_date)
+            exporter.export_to_csv(db_connect, TABLE_NAME, start_date, end_date)
     except Exception as e:
         logging.error(f"An error occurred: {e}")
 
