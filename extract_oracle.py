@@ -2,11 +2,22 @@ import cx_Oracle
 import csv
 import datetime
 import unittest
+import os
+import shutil
+from paramiko import SSHClient
+from scp import SCPClient
 
 db_connect = cx_Oracle.connect('user/pass@hostname:port/service_name')
 sql = "SELECT * FROM your_table WHERE DT BETWEEN :start_day AND :end_day"
 start_date = datetime.date(2024, 1, 1)
 end_date = datetime.date(2024, 12, 31)
+
+def push_to_server(filename, hostname, username, password):
+    ssh = SSHClient()
+    ssh.load_system_host_keys()
+    ssh.connect(hostname, username=username, password=password)
+    with SCPClient(ssh.get_transport()) as scp:
+        scp.put(filename + '.zip')
 
 def export_to_csv(db_connect, sql, start_date, end_date):
     # Connect to the database
@@ -32,5 +43,10 @@ def export_to_csv(db_connect, sql, start_date, end_date):
                             break
                         writer.writerows(rows)  # Write data rows
 
+                # Archive the file
+                shutil.make_archive(filename, 'zip', '.', filename)
+
+                # Push the file to another server
+                push_to_server(filename, 'hostname', 'username', 'password')
 
 export_to_csv(db_connect, sql, start_date, end_date)
