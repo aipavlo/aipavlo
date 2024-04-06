@@ -12,6 +12,14 @@ db_connect = cx_Oracle.connect('user/pass@hostname:port/service_name')
 start_date = datetime.date(2024, 1, 1)
 end_date = datetime.date(2024, 12, 31)
 
+def get_db_connection():
+    user = os.getenv('DB_USER')
+    password = os.getenv('DB_PASSWORD')
+    hostname = os.getenv('DB_HOSTNAME')
+    port = os.getenv('DB_PORT')
+    service_name = os.getenv('DB_SERVICE_NAME')
+    return cx_Oracle.connect(f'{user}/{password}@{hostname}:{port}/{service_name}')
+
 def compute_hash(filename):
     # Use SHA256 hash algorithm
     hash_func = hashlib.sha256()
@@ -81,7 +89,9 @@ def export_to_csv(db_connect, table_name, start_date, end_date):
                 else:
                     print('The file was corrupted during transfer.')
 
-export_to_csv(db_connect, 'your_table', start_date, end_date)
+if __name__ == "__main__":
+    with get_db_connection() as db_connect:
+        export_to_csv(db_connect, 'your_table', start_date, end_date)
 
 
 
