@@ -8,6 +8,9 @@ import hashlib
 from paramiko import SSHClient
 from scp import SCPClient
 
+# Load environment variables from .env file
+load_dotenv()
+
 start_date = datetime.date(2024, 1, 1)
 end_date = datetime.date(2024, 12, 31)
 
