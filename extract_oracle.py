@@ -31,6 +31,15 @@ def push_to_server(filename, hostname, username, password):
     with SCPClient(ssh.get_transport()) as scp:
         scp.put(filename + '.zip')
 
+    # Compute and print the hash of the file on the remote server
+    stdin, stdout, stderr = ssh.exec_command(f"sha256sum {filename}.zip")
+    hash_after = stdout.read().split()[0].decode()
+    print(f'Hash after receiving: {hash_after}')
+
+    ssh.close()
+
+    return hash_after
+
 def export_to_csv(db_connect, table_name, start_date, end_date):
     sql = f"SELECT * FROM {table_name} WHERE DT BETWEEN :start_day AND :end_day"
     # Connect to the database
@@ -63,12 +72,8 @@ def export_to_csv(db_connect, table_name, start_date, end_date):
                 hash_before = compute_hash(filename + '.zip')
                 print(f'Hash before sending: {hash_before}')
                 
-                # Push the file to another server
-                push_to_server(filename, 'hostname', 'username', 'password')
-                
-                # Compute and print the hash of the file after receiving
-                hash_after = compute_hash(filename + '.zip')
-                print(f'Hash after receiving: {hash_after}')
+                # Push the file to another server and get the hash after receiving
+                hash_after = push_to_server(filename, 'hostname', 'username', 'password')
             
                 # Check if the hashes match
                 if hash_before == hash_after:
